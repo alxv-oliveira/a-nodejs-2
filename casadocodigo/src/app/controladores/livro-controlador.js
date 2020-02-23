@@ -41,7 +41,7 @@ class LivroControlador {
         return function(req, resp) {
             const id = req.params.id;
             const livroDao = new LivroDao(db);
-
+    
             livroDao.buscaPorId(id)
                     .then(livro => 
                         resp.marko(
@@ -57,19 +57,19 @@ class LivroControlador {
         return function(req, resp) {
             console.log(req.body);
             const livroDao = new LivroDao(db);
-
+            
             const erros = validationResult(req);
-
+    
             if (!erros.isEmpty()) {
                 return resp.marko(
                     templates.livros.form,
                     { 
-                        livro: req.body, 
+                        livro: {}, 
                         errosValidacao: erros.array()
                     }
                 );
             }
-
+    
             livroDao.adiciona(req.body)
                     .then(resp.redirect(LivroControlador.rotas().lista))
                     .catch(erro => console.log(erro));
@@ -80,7 +80,7 @@ class LivroControlador {
         return function(req, resp) {
             console.log(req.body);
             const livroDao = new LivroDao(db);
-
+            
             livroDao.atualiza(req.body)
                     .then(resp.redirect(LivroControlador.rotas().lista))
                     .catch(erro => console.log(erro));
@@ -90,7 +90,7 @@ class LivroControlador {
     remove() {
         return function(req, resp) {
             const id = req.params.id;
-
+    
             const livroDao = new LivroDao(db);
             livroDao.remove(id)
                     .then(() => resp.status(200).end())
